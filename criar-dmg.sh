@@ -30,10 +30,13 @@ BUILD_DIR="/tmp/dmg_build"
 rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 
-# Copiar conteúdo: se for pasta, copiar a própria pasta; se for arquivo, copiar o próprio
+# Copiar conteúdo: se for pasta, copiar o conteúdo; se for arquivo, copiar o próprio
 if [ -d "$FILE_PATH" ]; then
-    # Copia a pasta inteira para que o usuário veja a pasta (ou .app) como um item único
-    cp -R "$FILE_PATH" "$BUILD_DIR/"
+    # Copia o conteúdo da pasta (arquivos individuais)
+    cp -R "$FILE_PATH"/* "$BUILD_DIR/" 2>/dev/null || {
+        # Se a pasta estiver vazia, copiar a pasta inteira
+        cp -R "$FILE_PATH" "$BUILD_DIR/"
+    }
 else
     cp -R "$FILE_PATH" "$BUILD_DIR/"
 fi
